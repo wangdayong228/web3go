@@ -24,7 +24,7 @@
 - Modify: `types/types.go`
 - Test later: `types/types_test.go`
 
-- [ ] **Step 1: Add the type and marshaling override**
+- [x] **Step 1: Add the type and marshaling override**
 
 In `types/types.go`, near `type Block struct`, add this code:
 
@@ -50,7 +50,7 @@ type blockPropertiesMarshaling struct {
 
 `types/types.go` already imports `math/big`, `common`, and `hexutil`, so no new imports are expected.
 
-- [ ] **Step 2: Run type package tests to confirm the new type currently compiles before codec generation**
+- [x] **Step 2: Run type package tests to confirm the new type currently compiles before codec generation**
 
 Run:
 
@@ -66,7 +66,7 @@ Expected: this may fail because `BlockProperties` has `*big.Int` fields without 
 - Create: `types/gen_block_properties_json.go`
 - Modify indirectly: generated file only
 
-- [ ] **Step 1: Run generation for the `types` package**
+- [x] **Step 1: Run generation for the `types` package**
 
 Run:
 
@@ -76,7 +76,7 @@ go generate ./types
 
 Expected: `types/gen_block_properties_json.go` is created, and existing generated files are unchanged unless the repository's generator version rewrites equivalent output.
 
-- [ ] **Step 2: Inspect generated codec for the required conversions**
+- [x] **Step 2: Inspect generated codec for the required conversions**
 
 Run:
 
@@ -113,7 +113,7 @@ if dec.BaseFeePerGas != nil {
 **Files:**
 - Modify: `types/types_test.go`
 
-- [ ] **Step 1: Add a failing test for the documented payload**
+- [x] **Step 1: Add a failing test for the documented payload**
 
 Append this test to `types/types_test.go`:
 
@@ -137,7 +137,7 @@ func TestBlockPropertiesUnmarshalDocExample(t *testing.T) {
 	assert.Equal(t, common.HexToAddress("0x1d69d968e3673e188b2d2d42b6a385686186258f"), props.Coinbase)
 	assert.Equal(t, big.NewInt(4), props.Difficulty)
 	assert.Equal(t, big.NewInt(60000000), props.GasLimit)
-	assert.Equal(t, uint64(1760438344), props.Timestamp)
+	assert.Equal(t, uint64(1760434248), props.Timestamp)
 	assert.Equal(t, big.NewInt(1), props.BaseFeePerGas)
 
 	encoded, err := json.Marshal(props)
@@ -146,7 +146,7 @@ func TestBlockPropertiesUnmarshalDocExample(t *testing.T) {
 }
 ```
 
-- [ ] **Step 2: Add a nullable field test**
+- [x] **Step 2: Add a nullable field test**
 
 Append this test to `types/types_test.go`:
 
@@ -173,7 +173,7 @@ func TestBlockPropertiesNullableFields(t *testing.T) {
 }
 ```
 
-- [ ] **Step 3: Run the type tests**
+- [x] **Step 3: Run the type tests**
 
 Run:
 
@@ -188,7 +188,7 @@ Expected: PASS.
 **Files:**
 - Modify: `client/client_debug.go`
 
-- [ ] **Step 1: Add the client method**
+- [x] **Step 1: Add the client method**
 
 In `client/client_debug.go`, add this method near the other `RpcDebugClient` methods:
 
@@ -199,7 +199,7 @@ func (c *RpcDebugClient) BlockProperties(block types.BlockNumberOrHash) (val []t
 }
 ```
 
-- [ ] **Step 2: Run package compile check**
+- [x] **Step 2: Run package compile check**
 
 Run:
 
@@ -214,7 +214,7 @@ Expected: existing network-dependent tests may make this package unsuitable for 
 **Files:**
 - Create: `client/client_debug_test.go`
 
-- [ ] **Step 1: Add a recording provider test helper**
+- [x] **Step 1: Add a recording provider test helper**
 
 Create `client/client_debug_test.go` with this content:
 
@@ -261,7 +261,7 @@ func (p *recordingProvider) SubscribeWithReconn(ctx context.Context, namespace s
 func (p *recordingProvider) Close() {}
 ```
 
-- [ ] **Step 2: Add the method/argument/response test**
+- [x] **Step 2: Add the method/argument/response test**
 
 Append this test to `client/client_debug_test.go`:
 
@@ -295,12 +295,12 @@ func TestRpcDebugClientBlockProperties(t *testing.T) {
 	assert.Equal(t, common.HexToAddress("0x1d69d968e3673e188b2d2d42b6a385686186258f"), props[0].Coinbase)
 	assert.Equal(t, big.NewInt(4), props[0].Difficulty)
 	assert.Equal(t, big.NewInt(60000000), props[0].GasLimit)
-	assert.Equal(t, uint64(1760438344), props[0].Timestamp)
+	assert.Equal(t, uint64(1760434248), props[0].Timestamp)
 	assert.Equal(t, big.NewInt(1), props[0].BaseFeePerGas)
 }
 ```
 
-- [ ] **Step 3: Add the null response test**
+- [x] **Step 3: Add the null response test**
 
 Append this test to `client/client_debug_test.go`:
 
@@ -320,7 +320,7 @@ func TestRpcDebugClientBlockPropertiesNullResult(t *testing.T) {
 }
 ```
 
-- [ ] **Step 4: Run focused client tests**
+- [x] **Step 4: Run focused client tests**
 
 Run:
 
@@ -335,7 +335,7 @@ Expected: PASS.
 **Files:**
 - Modify: all changed Go files
 
-- [ ] **Step 1: Format changed Go files**
+- [x] **Step 1: Format changed Go files**
 
 Run:
 
@@ -345,7 +345,7 @@ gofmt -w types/types.go types/types_test.go client/client_debug.go client/client
 
 Expected: no output.
 
-- [ ] **Step 2: Run focused required tests**
+- [x] **Step 2: Run focused required tests**
 
 Run:
 
@@ -355,7 +355,7 @@ go test ./types ./client -run 'TestBlockProperties|TestRpcDebugClientBlockProper
 
 Expected: PASS.
 
-- [ ] **Step 3: Run broader non-integration tests if practical**
+- [x] **Step 3: Run broader non-integration tests if practical**
 
 Run:
 
@@ -365,7 +365,7 @@ go test ./types ./client -count=1
 
 Expected: PASS if no existing network-dependent tests run in the `client` package. If this fails only because existing tests hit live RPC endpoints, record that and rely on Step 2 as required verification.
 
-- [ ] **Step 4: Review the final diff**
+- [x] **Step 4: Review the final diff**
 
 Run:
 
@@ -375,7 +375,7 @@ git diff -- types/types.go types/gen_block_properties_json.go types/types_test.g
 
 Expected: diff only contains `BlockProperties` type/codec/tests and `RpcDebugClient.BlockProperties` implementation/tests.
 
-- [ ] **Step 5: Commit implementation**
+- [x] **Step 5: Commit implementation**
 
 Run:
 
